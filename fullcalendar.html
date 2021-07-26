@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container col-sm-4 col-md-7 col-lg-4 mt-5">
+      <div class="card">
+        <h3 class="card-header bg-dark text-light" id="monthAndYear"></h3>
+        <div>
+        <table class="table table-bordered table-responsive-sm" id="calendar">
+          <thead>
+            <tr>
+              <th>Sun</th>
+              <th>Mon</th>
+              <th>Tue</th>
+              <th>Wed</th>
+              <th>Thu</th>
+              <th>Fri</th>
+              <th>Sat</th>
+            </tr>
+          </thead>
+
+          <tbody id="calendar-body"></tbody>
+        </table>
+      </div>
+        <div class="form-inline">
+          <button
+            class="btn btn-outline-primary col-sm-6"
+            id="previous"
+            onclick="previous()"
+          >
+            Previous
+          </button>
+
+          <button
+            class="btn btn-outline-primary col-sm-6"
+            id="next"
+            onclick="next()"
+          >
+            Next
+          </button>
+        </div>
+        <br />
+        <form class="form-inline">
+          <!-- <label class="lead mr-2 ml-2" for="month">Jump To: </label> -->
+          <div id="month" class="lead mr-2 ml-2"></div>
+          <div id="year" class="lead mr-2 ml-2"></div>
+        </form>
+      </div>
+    </div>
+    <div id="divdata ">
+      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header bg-dark text-light ">
+              <h5 class="modal-title h2" id="exampleModalLabel">Save important notes</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div>
+              </div>
+            <div class="form-group text-success h3">
+              <label for="exampleFormControlTextarea1 " >Enter your notes</label>
+              <textarea class="form-control" id="notes" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+              <p id="datemodal"></p>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+              <button type="button" class="btn btn-primary" id="buttonsave"  data-dismiss="modal" >Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- view div modal  -->
+    <div id="viewdata">
+      <div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Descripton</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div>
+              <table class="table table-striped table-dark table-hover">
+                <thead >
+                  <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="passviewdata">
+
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <p>Thank you</p>
+              <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="deleteviewmodal()" >DeleteAll</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      today = new Date();
+      currentMonth = today.getMonth();
+      currentYear = today.getFullYear();
+      selectYear = document.getElementById("year");
+      selectMonth = document.getElementById("month");
+      months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      select();
+
+      monthAndYear = document.getElementById("monthAndYear");
+      showCalendar(currentMonth, currentYear);
+
+      function next() {
+        currentYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+        currentMonth = (currentMonth + 1) % 12;
+        showCalendar(currentMonth, currentYear);
+      }
+
+      function previous() {
+        currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+        currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+        showCalendar(currentMonth, currentYear);
+      }
+
+      function jump(a, b) {
+        currentYear = parseInt(b);
+        currentMonth = parseInt(a);
+        showCalendar(currentMonth, currentYear);
+      }
+      function select() {
+        let divm = document.getElementById("month");
+        selectMonth = document.createElement("select");
+        selectMonth.name = "month";
+        for (let i = 0; i < 12; i++) {
+          let option = document.createElement("option");
+          option.value = i;
+          option.innerHTML = months[i];
+          selectMonth.appendChild(option);
+
+          divm.appendChild(selectMonth);
+        }
+        divm.addEventListener("change", function () {
+          jump(selectMonth.value, selectYear.value);
+        });
+
+        let divy = document.getElementById("year");
+        selectYear = document.createElement("select");
+        selectYear.name = "year";
+        for (let i = 0; i < 51; i++) {
+          let option = document.createElement("option");
+          option.value = `${1990 + i}`;
+          option.innerHTML = `${1990 + i}`;
+          selectYear.appendChild(option);
+          divy.appendChild(selectYear);
+        }
+        divy.addEventListener("change", function () {
+          jump(selectMonth.value, selectYear.value);
+        });
+      }
+
+      function showCalendar(month, year) {
+        let firstDay = new Date(year, month).getDay();
+
+        tbl = document.getElementById("calendar-body"); // body of the calendar
+
+        // clearing all previous cells
+        tbl.innerHTML = "";
+
+        // filing data about month and in the page via DOM.
+        monthAndYear.innerHTML = months[month] + " " + year;
+        selectMonth.value = month;
+        selectYear.value =  year;
+        // creating all cells
+        date = 1;
+        buttontd =" ";
+        for (let i = 0; i < 6; i++) {
+          // creates a table row
+          let row = document.createElement("tr");
+        array = [];
+          //creating individual cells, filing them up with data.
+          for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < firstDay) {
+              cell = document.createElement("td");
+              cellText = document.createTextNode("");
+              cell.appendChild(cellText);
+              row.appendChild(cell);
+            } else if (date > daysInMonth(month, year)) {
+              break;
+            } else {
+              cell = document.createElement("td");
+              celldiv1=document.createElement("div");
+              celldiv1.setAttribute("class", "cell");
+              cell.setAttribute("id", `${date}`);
+              // celldiv.setAttribute('id',"divdate")
+              celldiv =`<button type="button" class="btn " data-toggle="modal" onclick="selectmodal(${date})" data-target="#exampleModal">${date}</button>`;
+              if (
+                date === today.getDate() &&
+                year === today.getFullYear() &&
+                month === today.getMonth()
+                ) {
+                  cell.classList.add("bg-info");
+                } // color today's date
+                cell.innerHTML=buttontd;
+              celldiv1.innerHTML=celldiv
+              cell.appendChild(celldiv1);
+              array.push(parseInt(cell.innerHTML));
+              row.appendChild(cell);
+              date++;
+              
+            }
+            tbl.appendChild(row);
+          }
+        }
+      }
+      //click any button then ===> calling div modal  
+      function selectmodal(date){
+        let m=parseInt(selectMonth.value) +1 ;
+        datemodal=document.getElementById("datemodal");
+        datemodal.innerHTML =date +" " + m +" " + selectYear.value;
+        datepass=date;
+        }
+
+        //calling local for storing data 
+        let buttonsave=document.getElementById("buttonsave");
+        buttonsave.addEventListener("click",local);
+
+        function local() {
+          textarea=document.getElementById("notes");
+          let notes=localStorage.getItem(datemodal.innerHTML);
+          // console.log("localstorage getitem:",localStorage.getItem(datemodal.innerHTML));
+          
+          if(notes === null ){
+            datearray=[];
+          }
+          else{ 
+            datearray=JSON.parse(notes);
+          }
+          if(textarea.value !== ""){
+          datearray.push(textarea.value);
+          // console.log("div ka textarea:",textarea.value);
+          localStorage.setItem(datemodal.innerHTML,JSON.stringify(datearray));
+          textarea.value="";
+          }
+          window.location.reload();
+        }
+
+      retrive=Object.keys(localStorage);
+      get=" "
+      retrive.forEach( (element,index)=>{
+
+        //giving date using slice then parseint then string
+        let numberconversion=parseInt(element.slice(-10,2));
+        let stringconversion=String(numberconversion);
+        let viewdata=document.getElementById(`${stringconversion}`);
+       
+        
+        //view button -table
+          let viewdiv=document.createElement('div');
+          // console.log(i)
+          viewmodal =`<button type="button" class="btn btn-success my-2 " data-toggle="modal"  data-target="#viewModal" onclick="viewevent(${index})">^</button>`
+          viewdiv.innerHTML=viewmodal;
+          viewdata.appendChild(viewdiv);  
+      });
+      //when ever user pass Data  on localstorage then this function give the view button
+      function viewevent(element) {
+        let passviewdata=document.getElementById('passviewdata');
+          passviewdata.innerHTML=""
+
+          get=JSON.parse(localStorage.getItem(`${retrive[element]}`));
+          // console.log(get[0]);
+          for(let i=0;i<get.length;i++){
+          viewdatatr=document.createElement('tr');
+          viewdatatr.setAttribute('class','classDelete');
+          viewdatatr.setAttribute('id',`${100+i}`);
+          viewdatatd1=document.createElement('td');
+          viewdatatd2=document.createElement('td');
+          singledelete=`<button type="button" class="btn btn-danger" id="${1000+i}"data-dismiss="modal"  >Delete</button>`
+          viewdatatd3=document.createElement('td');
+          viewdatatd3.innerHTML=singledelete;
+          viewdatatd1.innerHTML=retrive[element];
+          viewdatatd2.innerHTML=get[i];
+          viewdatatr.appendChild(viewdatatd1);
+          viewdatatr.appendChild(viewdatatd2);
+          viewdatatr.appendChild(viewdatatd3);
+          passviewdata.appendChild(viewdatatr);
+
+
+          let singledeletedata=document.getElementById(`${1000+i}`);
+          singledeletedata.addEventListener("click",() =>{
+            get.splice(i,1)
+            console.log(get.length)
+            localStorage.setItem(`${retrive[element]}`,JSON.stringify(get));
+            if(get.length === 0){
+              localStorage.removeItem(`${retrive[element]}`)
+              window.location.reload()
+            }
+          });
+          }
+      }
+      //delete option on view modal
+      function deleteviewmodal() {
+        let passviewdata=document.getElementById('passviewdata');
+        let keyvalue=passviewdata.children[0];
+        let deleteid=keyvalue.id;
+        keyvalue=document.getElementById(`${deleteid}`);
+        tdchildren=keyvalue.children;
+        tdchildren=tdchildren[0].innerHTML;
+        localStorage.removeItem(tdchildren);
+        window.location.reload();
+        
+      }
+
+      //delete single entry
+      // function deleteSingleEntry(i){
+      
+
+      
+      // }
+      //getting days of the month
+      function daysInMonth(iMonth, iYear) {
+        return 32 - new Date(iYear, iMonth, 32).getDate();
+      }
+    </script>
+  </body>
+</html>
