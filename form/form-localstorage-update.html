@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style-form.css">
+</head>
+<body>
+    <div>
+        <form >
+            <label for="name">Name:</label>
+            <input type="text" id="name" placeholder="Enter your name"><br>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Enter your Email"><br>
+            
+            <label for="address">Address:</label><br>
+            <textarea id="address" placeholder="Enter your Address"></textarea> <br>
+
+            <select id="select">
+                <option>India</option>
+                <option>Canada</option>
+                <option>Uk</option>
+                <option>USA</option>
+                <option>Australia</option>
+                <option>Germany</option>
+            </select>
+            <br>
+
+            <label for="checkbox">Skills:</label><br>
+            <input type="checkbox" class="checkbox"  id="check1" name="Web-devloper" value="Web-devloper">
+            <label for="Web-devloper">Web-devloper</label>
+            <input type="checkbox" class="checkbox" id="check2" name="ux-designer" value="ux-designer">
+            <label for="ux-designer">ux-designer</label>
+            <input type="checkbox" class="checkbox" id="check3" name="Android-devloper" value="Android-devloper">
+            <label for="Android-devloper">Android-devloper</label><br>
+
+
+            <label>Gender:</label>
+            <input type="radio" class="gender" id="gen1"name="gender" value="male">
+            <label for="male">Male</label>
+            <input type="radio" class="gender" id="gen2"name="gender" value="female">
+            <label for="female">Female</label><br>
+
+            <button type="submit" id="submit" >Submit</button>
+        </form>
+    </div>
+        <table>
+            <tbody id="tbody"></tbody>
+        </table>
+    <script src="form-localstorage-update.js"></script>
+</body>
+</html>
